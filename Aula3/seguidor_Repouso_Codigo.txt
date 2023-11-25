@@ -22,7 +22,7 @@ long int delta;
 
 int velMotor_dir = 100;
 int velMotor_esq = 100;
-float Kp=0.1;
+float Kp=0.4;
 
 void setup() {
   Serial.begin(9600);
@@ -77,4 +77,28 @@ void loop() {
     digitalWrite(motor2DirA, LOW);
     digitalWrite(motor2DirB, HIGH);
     analogWrite(motor2PWM, delta);
+  }
+
+      // Mostra os valores na porta serial
+  //Serial.print("Valor A0: ");
+  //Serial.print(valorA0);
+  //Serial.print("   Valor A1: ");
+  //Serial.print(valorA1);
+  //Serial.print("   Valor A2: ");
+  //Serial.println(valorA2);
+
+  //Serial.print("num: ");
+  //Serial.print(num);
+  //Serial.print("   den: ");
+  //Serial.print(den);
+  //Serial.print("   faixa: ");
+  //Serial.print(faixa);
+  //Serial.print("     erro: ");
+  //Serial.println(erro);
+  //Serial.print("     delta: ");
+  //Serial.println(delta); 
+  
+
+  //delay(1500);
+
 }
