@@ -86,26 +86,26 @@ void loop() {
     
   }
 
-    // Mostra os valores na porta serial
-  //Serial.print("Valor A0: ");
-  //Serial.print(valorA0);
-  //Serial.print("   Valor A1: ");
-  //Serial.print(valorA1);
-  //Serial.print("   Valor A2: ");
-  //Serial.println(valorA2);
+    //Mostra os valores na porta serial
+  Serial.print("Valor A0: ");
+  Serial.print(valorA0);
+  Serial.print("   Valor A1: ");
+  Serial.print(valorA1);
+  Serial.print("   Valor A2: ");
+  Serial.println(valorA2);
 
-  //Serial.print("num: ");
-  //Serial.print(num);
-  //Serial.print("   den: ");
-  //Serial.print(den);
-  //Serial.print("   faixa: ");
-  //Serial.print(faixa);
-  //Serial.print("     erro: ");
-  //Serial.println(erro);
-  //Serial.print("     delta: ");
-  //Serial.println(delta); 
+  Serial.print("num: ");
+  Serial.print(num);
+  Serial.print("   den: ");
+  Serial.print(den);
+  Serial.print("   faixa: ");
+  Serial.print(faixa);
+  Serial.print("     erro: ");
+  Serial.println(erro);
+  Serial.print("     delta: ");
+  Serial.println(delta); 
   
 
-  //delay(1500);
+  delay(1500);
 
 }
