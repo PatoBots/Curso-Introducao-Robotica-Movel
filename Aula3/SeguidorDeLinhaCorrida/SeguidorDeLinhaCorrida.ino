@@ -24,8 +24,8 @@ int maxSensor[NUM_SEN];
 int valorSensores[NUM_SEN];
 
 // Variáveis para controle PID
-float Kp = 50.0;    // Constante proporcional
-float Kd = 150.0;    // Constante diferencial
+float Kp = 0.0;    // Constante proporcional
+float Kd = 0.0;    // Constante diferencial
 float erro = 0;
 float erroAnterior = 0;
 
