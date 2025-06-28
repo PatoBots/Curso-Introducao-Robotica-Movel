@@ -62,12 +62,113 @@ void setup() {
   // Parar motores inicialmente
   pararMotores();
   
+  // Inicializar valores de calibração
+  for (int i = 0; i < NUM_SEN; i++) {
+    minSensor[i] = 1023;
+    maxSensor[i] = 0;
+  }
+  
+  Serial.println("Sistema iniciado. Pressione o botão para calibrar.");
 }
 
 void loop() {
+  // Leitura do botão
+  bool estadoBotao = digitalRead(BUTTON_PIN);
+  
+  // Detecção de borda de subida do botão
+  if (estadoBotao && !botaoEstadoAnteior) {
+    botaoAtual = true;
+    delay(50); // Debounce
+  }
+  botaoEstadoAnteior = estadoBotao;
+  
+  // Máquina de estados
+  switch (estadoAtual) {
+    case ESPERANDO:
+      if (botaoAtual) {
+        estadoAtual = CALIBRANDO;
+        botaoAtual = false;
+        Serial.println("Iniciando calibração...");
+        delay(500);
+        calibrarSensores();
+      }
+      break;
+      
+    case CALIBRANDO:
+      estadoAtual = CORRENDO;
+      Serial.println("Calibração concluída. Iniciando corrida!");
+      delay(3000); // Depois de 3s inicia a corrida 
+      break;
+      
+    case CORRENDO:
+      if (botaoAtual) {
+        estadoAtual = ESPERANDO;
+        botaoAtual = false;
+        pararMotores();
+        Serial.println("Parando robô. Pressione o botão novamente para recalibrar.");
+      } else {
+        seguirLinha();
+      }
+      break;
+  }
+}
 
-  seguirLinha();
-
+void calibrarSensores() {
+  Serial.println("Movendo robô para calibração...");
+  
+  // Calibração por 3 segundos girando o robô
+  unsigned long tempoInicial = millis();
+  
+  while (millis() - tempoInicial < 3000) {
+    // Girar o robô lentamente para a direita
+    acelerar(50, -50);
+    
+    // Ler sensores e atualizar valores min/max
+    for (int i = 0; i < NUM_SEN; i++) {
+      int faixa = analogRead(pinoSensores[i]);
+      if (faixa < minSensor[i]) {
+        minSensor[i] = faixa;
+      }
+      if (faixa > maxSensor[i]) {
+        maxSensor[i] = faixa;
+      }
+    }
+    delay(10);
+  }
+  
+  // Girar para o outro lado
+  tempoInicial = millis();
+  while (millis() - tempoInicial < 3000) {
+    // Girar o robô lentamente para a esquerda
+    acelerar(-50, 50);
+    
+    // Ler sensores e atualizar valores min/max
+    for (int i = 0; i < NUM_SEN; i++) {
+      int faixa = analogRead(pinoSensores[i]);
+      if (faixa < minSensor[i]) {
+        minSensor[i] = faixa;
+      }
+      if (faixa > maxSensor[i]) {
+        maxSensor[i] = faixa;
+      }
+    }
+    delay(10);
+  }
+  
+  pararMotores();
+  
+  // Mostrar valores de calibração
+  Serial.println("Valores de calibração:");
+  for (int i = 0; i < NUM_SEN; i++) {
+    Serial.print("Sensor ");
+    Serial.print(i);
+    Serial.print(": Min=");
+    Serial.print(minSensor[i]);
+    Serial.print(", Max=");
+    Serial.println(maxSensor[i]);
+  }
+  
+  delay(1000);
 }
 
 void seguirLinha() {
@@ -85,6 +186,7 @@ void seguirLinha() {
   float pid = Kp * erro + Kd * derivativo;
   erroAnterior = erro;
   
+  // Calcular velocidades dos motores
   int velEsquerda = pid;
   int velDireita = -pid;
   
@@ -94,6 +196,20 @@ void seguirLinha() {
   
   // Aplicar velocidades aos motores
   acelerar(velEsquerda, velDireita);
+  
+  // Debug (opcional)
+/*
+  Serial.print("Posição: ");
+  Serial.print(posicao);
+  Serial.print(" | Erro: ");
+  Serial.print(erro);
+  Serial.print(" | Correção: ");
+  Serial.print(correcao);
+  Serial.print(" | Motores: L=");
+  Serial.print(velEsquerda);
+  Serial.print(" R=");
+  Serial.println(velDireita);
+*/
 }
 
 void lerSensores() {
