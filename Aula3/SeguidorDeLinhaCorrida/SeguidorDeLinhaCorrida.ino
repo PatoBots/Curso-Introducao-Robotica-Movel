@@ -233,11 +233,6 @@ float controleLinha() {
   if (den == 0) {
     return 3.5; // Retorna centro se nenhum sensor detectar linha
   }
-
-  if (den > 6900) {
-    delay(250);
-    if(den > 6900) botaoAtual=1;
-  }
   
   return (float)num / den / 1000.0;
 }
