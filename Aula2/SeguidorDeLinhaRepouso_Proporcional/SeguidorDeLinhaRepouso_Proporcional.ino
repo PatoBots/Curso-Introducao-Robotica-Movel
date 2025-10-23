@@ -177,7 +177,7 @@ void seguirLinha() {
   float posicao = controleLinha();
   
   // Calcular erro (0 = centro, negativo = esquerda, positivo = direita)
-  erro = posicao - 2.5; // Centro dos 7 sensores (0-5)
+  erro = posicao - 2.5; // Centro dos 6 sensores (0-5)
   
   // Controle PID
   float pid = Kp * erro;
